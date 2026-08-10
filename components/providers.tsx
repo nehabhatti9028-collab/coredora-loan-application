@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -86,7 +87,9 @@ export function AuthProvider({
           error,
         } = await supabase.auth.getSession();
 
-        if (!mounted) return;
+        if (!mounted) {
+          return;
+        }
 
         if (error) {
           console.error("Session error:", error);
@@ -94,8 +97,6 @@ export function AuthProvider({
           setSession(null);
           setUser(null);
           setProfile(null);
-          setLoading(false);
-
           return;
         }
 
@@ -128,7 +129,9 @@ export function AuthProvider({
       data: { subscription },
     } = supabase.auth.onAuthStateChange(
       (_event, nextSession) => {
-        if (!mounted) return;
+        if (!mounted) {
+          return;
+        }
 
         setSession(nextSession);
         setUser(nextSession?.user ?? null);
@@ -168,21 +171,71 @@ export function AuthProvider({
       email: string,
       password: string
     ): Promise<{ error: string | null }> => {
+      const cleanEmail = email.trim().toLowerCase();
+
+      if (!cleanEmail) {
+        return {
+          error: "Please enter your email address.",
+        };
+      }
+
+      if (!password) {
+        return {
+          error: "Please enter your password.",
+        };
+      }
+
       try {
-        const { error } =
+        const { data, error } =
           await supabase.auth.signInWithPassword({
-            email: email.trim(),
+            email: cleanEmail,
             password,
           });
 
-        return {
-          error: error ? error.message : null,
-        };
-      } catch (error) {
-        console.error("Sign in error:", error);
+        if (error) {
+          console.error("Supabase sign-in error:", {
+            message: error.message,
+            status: error.status,
+            code: error.code,
+          });
+
+          const message = error.message.toLowerCase();
+
+          if (message.includes("invalid login credentials")) {
+            return {
+              error: "Incorrect email or password.",
+            };
+          }
+
+          if (message.includes("email not confirmed")) {
+            return {
+              error:
+                "Please verify your email before signing in.",
+            };
+          }
+
+          return {
+            error:
+              "Unable to sign in. Please check your email and password.",
+          };
+        }
+
+        if (!data.user || !data.session) {
+          return {
+            error:
+              "Login could not be completed. Please try again.",
+          };
+        }
 
         return {
-          error: "Unable to sign in. Please try again.",
+          error: null,
+        };
+      } catch (error) {
+        console.error("Unexpected sign-in error:", error);
+
+        return {
+          error:
+            "Unable to sign in right now. Please try again.",
         };
       }
     },
@@ -195,29 +248,72 @@ export function AuthProvider({
       password: string,
       fullName: string
     ): Promise<{ error: string | null }> => {
+      const cleanEmail = email.trim().toLowerCase();
+      const cleanName = fullName.trim();
+
+      if (!cleanName) {
+        return {
+          error: "Please enter your full name.",
+        };
+      }
+
+      if (!cleanEmail) {
+        return {
+          error: "Please enter your email address.",
+        };
+      }
+
+      if (password.length < 6) {
+        return {
+          error: "Password must be at least 6 characters.",
+        };
+      }
+
       try {
-        const {
-          data,
-          error,
-        } = await supabase.auth.signUp({
-          email: email.trim(),
-          password,
-          options: {
-            data: {
-              full_name: fullName.trim(),
+        const { data, error } =
+          await supabase.auth.signUp({
+            email: cleanEmail,
+            password,
+            options: {
+              data: {
+                full_name: cleanName,
+              },
             },
-          },
-        });
+          });
 
         if (error) {
+          console.error("Supabase sign-up error:", {
+            message: error.message,
+            status: error.status,
+            code: error.code,
+          });
+
+          const message = error.message.toLowerCase();
+
+          if (message.includes("already registered")) {
+            return {
+              error:
+                "An account with this email already exists. Please sign in.",
+            };
+          }
+
+          if (message.includes("password")) {
+            return {
+              error:
+                "Please choose a stronger password with at least 6 characters.",
+            };
+          }
+
           return {
-            error: error.message,
+            error:
+              "Unable to create your account. Please try again.",
           };
         }
 
         if (!data.user) {
           return {
-            error: "Sign up failed. Please try again.",
+            error:
+              "Account could not be created. Please try again.",
           };
         }
 
@@ -225,10 +321,11 @@ export function AuthProvider({
           error: null,
         };
       } catch (error) {
-        console.error("Sign up error:", error);
+        console.error("Unexpected sign-up error:", error);
 
         return {
-          error: "Unable to create account. Please try again.",
+          error:
+            "Unable to create your account. Please try again.",
         };
       }
     },
@@ -244,11 +341,19 @@ export function AuthProvider({
         setSession(null);
         setProfile(null);
 
+        if (error) {
+          console.error("Supabase sign-out error:", error);
+
+          return {
+            error: error.message,
+          };
+        }
+
         return {
-          error: error ? error.message : null,
+          error: null,
         };
       } catch (error) {
-        console.error("Sign out error:", error);
+        console.error("Unexpected sign-out error:", error);
 
         setUser(null);
         setSession(null);
@@ -291,3 +396,4 @@ export function useAuth(): AuthContextValue {
 
   return context;
 }
+
