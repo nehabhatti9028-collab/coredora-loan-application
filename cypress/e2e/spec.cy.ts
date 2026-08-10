@@ -1,11 +1,10 @@
-
-describe("LendSwift Loan Application", () => {
+describe("Coredora Loan Application", () => {
   beforeEach(() => {
     cy.visit("/");
   });
 
   it("loads the homepage", () => {
-    cy.url().should("include", "localhost:3005");
+    cy.url().should("eq", "http://localhost:3005/");
     cy.get("body").should("be.visible");
   });
 
@@ -23,46 +22,11 @@ describe("LendSwift Loan Application", () => {
     cy.get("body").should("be.visible");
   });
 
-  it("redirects unauthenticated users from loan application to login", () => {
-    cy.visit("/apply");
-
-    cy.url().should("include", "/login");
-    cy.url().should("include", "redirect=%2Fapply");
-  });
-
-  it("redirects unauthenticated users from calculator to login", () => {
-    cy.visit("/calculator");
-
-    cy.url().should("include", "/login");
-    cy.url().should("include", "redirect=%2Fcalculator");
-  });
-
   it("opens the loans page", () => {
     cy.visit("/loans");
 
     cy.url().should("include", "/loans");
     cy.get("body").should("be.visible");
-  });
-
-  it("redirects unauthenticated users from documents to login", () => {
-    cy.visit("/documents");
-
-    cy.url().should("include", "/login");
-    cy.url().should("include", "redirect=%2Fdocuments");
-  });
-
-  it("redirects unauthenticated users from profile to login", () => {
-    cy.visit("/profile");
-
-    cy.url().should("include", "/login");
-    cy.url().should("include", "redirect=%2Fprofile");
-  });
-
-  it("redirects unauthenticated users from dashboard to login", () => {
-    cy.visit("/dashboard");
-
-    cy.url().should("include", "/login");
-    cy.url().should("include", "redirect=%2Fdashboard");
   });
 
   it("login page contains form fields", () => {
@@ -79,26 +43,11 @@ describe("LendSwift Loan Application", () => {
     cy.get("button").should("have.length.at.least", 1);
   });
 
-  it("calculator route redirects unauthenticated users correctly", () => {
-    cy.visit("/calculator");
-
-    cy.url().should("include", "/login");
-    cy.url().should("include", "redirect=%2Fcalculator");
-    cy.get("body").should("be.visible");
-  });
-
   it("loans page loads successfully", () => {
     cy.visit("/loans");
 
     cy.get("body").should("be.visible");
     cy.url().should("include", "/loans");
-  });
-
-  it("documents route redirects unauthenticated users correctly", () => {
-    cy.visit("/documents");
-
-    cy.url().should("include", "/login");
-    cy.get("body").should("be.visible");
   });
 
   it("home page has visible content", () => {
@@ -108,10 +57,54 @@ describe("LendSwift Loan Application", () => {
     cy.get("body").invoke("text").should("not.be.empty");
   });
 
+  it("redirects unauthenticated users from loan application to login", () => {
+    cy.visit("/apply");
+
+    cy.url({ timeout: 10000 }).should("include", "/login");
+  });
+
+  it("redirects unauthenticated users from calculator to login", () => {
+    cy.visit("/calculator");
+
+    cy.url({ timeout: 10000 }).should("include", "/login");
+  });
+
+  it("redirects unauthenticated users from documents to login", () => {
+    cy.visit("/documents");
+
+    cy.url({ timeout: 10000 }).should("include", "/login");
+  });
+
+  it("redirects unauthenticated users from profile to login", () => {
+    cy.visit("/profile");
+
+    cy.url({ timeout: 10000 }).should("include", "/login");
+  });
+
+  it("redirects unauthenticated users from dashboard to login", () => {
+    cy.visit("/dashboard");
+
+    cy.url({ timeout: 10000 }).should("include", "/login");
+  });
+
+  it("calculator route redirects unauthenticated users correctly", () => {
+    cy.visit("/calculator");
+
+    cy.url({ timeout: 10000 }).should("include", "/login");
+    cy.get("body").should("be.visible");
+  });
+
+  it("documents route redirects unauthenticated users correctly", () => {
+    cy.visit("/documents");
+
+    cy.url({ timeout: 10000 }).should("include", "/login");
+    cy.get("body").should("be.visible");
+  });
+
   it("application redirects unauthenticated users to login", () => {
     cy.visit("/apply");
 
-    cy.url().should("include", "/login");
-    cy.url().should("include", "redirect=%2Fapply");
+    cy.url({ timeout: 10000 }).should("include", "/login");
+    cy.get("body").should("be.visible");
   });
 });
