@@ -362,3 +362,11 @@ Before final submission, verify:
 ## Project Status
 
 Coredora is configured as a modern Next.js loan application platform with authentication, protected application flows, validation, financial calculations, document handling, architecture documentation, and automated end-to-end testing.
+## 🧪 Testing
+
+The project includes Cypress end-to-end tests covering the main application routes and authentication behavior.
+
+### Run type checking
+
+```bash
+npm run typecheck
