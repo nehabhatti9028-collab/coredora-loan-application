@@ -1,0 +1,269 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 210 25% 93%;
+  --foreground: 220 41% 20%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 220 41% 20%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 41% 20%;
+
+  --primary: 220 43% 20%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 210 42% 72%;
+  --secondary-foreground: 220 41% 20%;
+
+  --muted: 210 36% 90%;
+  --muted-foreground: 215 16% 45%;
+
+  --accent: 209 56% 82%;
+  --accent-foreground: 220 41% 20%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+
+  --success: 142 71% 45%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 100%;
+
+  --border: 210 28% 85%;
+  --input: 210 28% 85%;
+  --ring: 220 43% 20%;
+
+  --chart-1: 220 43% 20%;
+  --chart-2: 210 42% 72%;
+  --chart-3: 209 56% 82%;
+  --chart-4: 210 36% 90%;
+  --chart-5: 215 18% 55%;
+
+  --radius: 0.75rem;
+
+  --sidebar: 220 43% 20%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-accent: 210 42% 72%;
+}
+
+.dark {
+  --background: 222 47% 7%;
+  --foreground: 210 40% 96%;
+
+  --card: 222 40% 10%;
+  --card-foreground: 210 40% 96%;
+
+  --popover: 222 40% 10%;
+  --popover-foreground: 210 40% 96%;
+
+  --secondary: 217 33% 17%;
+  --secondary-foreground: 210 40% 96%;
+
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+
+  --accent: 199 89% 52%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+
+  --success: 142 71% 45%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 100%;
+
+  --border: 217 33% 20%;
+  --input: 217 33% 20%;
+  --ring: 199 89% 52%;
+
+  --sidebar: 222 50% 5%;
+  --sidebar-foreground: 210 40% 96%;
+  --sidebar-accent: 199 89% 52%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .dark .glass {
+    background: rgba(15, 23, 42, 0.72);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      135deg,
+      hsl(199 89% 48%),
+      hsl(174 72% 42%)
+    );
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(
+        to right,
+        hsl(var(--border) / 0.4) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        hsl(var(--border) / 0.4) 1px,
+        transparent 1px
+      );
+    background-size: 48px 48px;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out both;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s ease-out both;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.step-delay-1 {
+  animation-delay: 0.05s;
+}
+
+.step-delay-2 {
+  animation-delay: 0.1s;
+}
+
+.step-delay-3 {
+  animation-delay: 0.15s;
+}
+
+.step-delay-4 {
+  animation-delay: 0.2s;
+}
+
+.step-delay-5 {
+  animation-delay: 0.25s;
+}
+
+.step-delay-6 {
+  animation-delay: 0.3s;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 8px;
+  border: 2px solid hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
